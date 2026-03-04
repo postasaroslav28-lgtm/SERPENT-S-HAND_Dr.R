@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serpent's Hand | Архив Развлечудова</title>
+    <style>
+        /* ========== СТИЛИ (полностью сохранены из предыдущей версии) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #020402;
+            color: #b7dbb7;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.03) 0px, rgba(0, 40, 0, 0.1) 2px, transparent 3px, transparent 5px);
+            pointer-events: none;
+            z-index: 1;
+            animation: scan 10s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 30px; }
+        }
+
+        .top-bar {
+            background: #071007;
+            border-bottom: 2px solid #1a9e1a;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 25px #0f6f0f;
+            position: relative;
+            z-index: 10;
+            border-image: repeating-linear-gradient(45deg, #1a9e1a, #0a2b0a 15px) 30;
+        }
+
+        .snake-logo {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 8px #4aff4a);
+            animation: glowPulse 3s infinite;
+            line-height: 1;
+        }
+
+        @keyframes glowPulse {
+            0% { filter: drop-shadow(0 0 2px #4aff4a); text-shadow: 0 0 3px #0f0; }
+            50% { filter: drop-shadow(0 0 15px #1bb31b); text-shadow: 0 0 10px #0f0; }
+            100% { filter: drop-shadow(0 0 2px #4aff4a); text-shadow: 0 0 3px #0f0; }
+        }
+
+        .org-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #9fff9f;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 8px #1e9e1e;
+            position: relative;
+        }
+
+        .org-name::after {
+            content: "SERPENT'S HAND";
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #0f0;
+            opacity: 0.3;
+            filter: blur(4px);
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .org-name span {
+            color: #6a8a6a;
+            font-size: 1rem;
+            margin-left: 10px;
+            letter-spacing: 1px;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 70px);
+            position: relative;
+            z-index: 5;
+        }
+
+        .side-nav {
+            width: 290px;
+            background: #091109;
+            border-right: 2px solid #1a6a1a;
+            padding: 20px 15px 30px 15px;
+            box-shadow: 5px 0 20px rgba(0, 50, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: relative;
+        }
+
+        .side-nav::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -2px;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, #1f9, #030, #1f9);
+            opacity: 0.4;
+            animation: borderGlow 4s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.2; }
+        }
+
+        .terminal-button {
+            background: #0f230f;
+            border: 2px solid #1f9;
+            color: #9f9;
+            padding: 15px 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px #1f9;
+            border-radius: 5px;
+        }
+
+        .terminal-button:hover {
+            background: #1f6f1f;
+            color: #000;
+            box-shadow: 0 0 35px #2f9;
+            transform: scale(1.02);
+        }
+
+        .side-nav .nav-header {
+            color: #5a9e5a;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #2a7a2a;
+            padding-bottom: 10px;
+            text-shadow: 0 0 5px #1a6a1a;
+        }
+
+        .side-nav .nav-item {
+            display: block;
+            width: 100%;
+        }
+
+        .side-nav .nav-link, .side-nav .nav-parent {
+            color: #b3e6b3;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            background: rgba(20, 60, 20, 0.2);
+            margin: 2px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-nav .nav-link:hover, .side-nav .nav-parent:hover {
+            background: #1a4a1a;
+            border-left-color: #8aff8a;
+            color: white;
+            transform: translateX(3px);
+            box-shadow: 0 0 15px #1f9;
+        }
+
+        .side-nav .nav-link.active, .side-nav .nav-parent.active {
+            background: #1f6f1f;
+            border-left-color: #cfffd0;
+            color: #ffffff;
+            box-shadow: 0 0 20px #2f9f2f;
+        }
+
+        .submenu {
+            list-style: none;
+            padding-left: 20px;
+            margin: 5px 0 5px 10px;
+            border-left: 1px dashed #2a9a2a;
+            display: none;
+        }
+
+        .nav-parent.active + .submenu, .submenu.active {
+            display: block;
+        }
+
+        .submenu .nav-link {
+            padding: 10px 15px;
+            font-size: 1rem;
+            background: rgba(10, 40, 10, 0.7);
+            border-left-color: #3f9;
+        }
+
+        .arrow {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+            color: #3f9;
+        }
+
+        .nav-parent.active .arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Модальные окна */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 5, 0, 0.95);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0b1a0b;
+            border: 3px solid #1f9;
+            padding: 35px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 50px #0f0, inset 0 0 20px #1f9;
+            animation: modalGlitch 3s infinite;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 1px solid #3f9;
+            opacity: 0.3;
+            animation: borderPulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes borderPulse {
+            0% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+            100% { opacity: 0.2; transform: scale(1); }
+        }
+
+        @keyframes modalGlitch {
+            0% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
+            20% { box-shadow: 0 0 40px #1f9, inset 0 0 15px #1f9; transform: skew(0.5deg); }
+            40% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; transform: skew(-0.5deg); }
+            60% { box-shadow: 0 0 50px #1f9, inset 0 0 20px #1f9; }
+            80% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
+            100% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
+        }
+
+        .modal-content h2 {
+            color: #9f9;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 5px #1f9;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            background: #020502;
+            border: 2px solid #1f9;
+            color: #9f9;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+            box-shadow: 0 0 10px #1f9;
+        }
+
+        .modal-content input:focus {
+            background: #051005;
+            border-color: #4f9;
+        }
+
+        .modal-error {
+            color: #f66;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            min-height: 20px;
+            text-shadow: 0 0 5px #f00;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            background: transparent;
+            border: 2px solid #1f9;
+            color: #9f9;
+            padding: 10px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .modal-btn:hover {
+            background: #1f9;
+            color: #000;
+            box-shadow: 0 0 25px #1f9;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 35px 40px;
+            overflow-y: auto;
+            background: rgba(0, 8, 0, 0.7);
+            backdrop-filter: blur(3px);
+            position: relative;
+        }
+
+        .content-area::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 255, 0, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .page {
+            display: none;
+            animation: fade 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0.3; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scp-document {
+            background: #0a140a;
+            border: 2px solid #1e6a1e;
+            padding: 40px 35px;
+            box-shadow: 0 15px 30px rgba(0, 30, 0, 0.9), inset 0 0 30px #0a2a0a;
+            position: relative;
+        }
+
+        .scp-document::before {
+            content: "SERPENT'S HAND • АРХИВ РАЗВЛЕЧУДОВА";
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #2f6a2f;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        .doc-header {
+            border-bottom: 2px dashed #1f9;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .doc-header h1 {
+            color: #cfefcf;
+            font-size: 2.2rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 5px #1f9;
+        }
+
+        .doc-header .meta {
+            color: #6a9a6a;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .doc-content {
+            color: #d0f0d0;
+        }
+
+        .doc-content h2 {
+            color: #bfe6bf;
+            margin: 30px 0 15px;
+            font-size: 1.8rem;
+            border-left: 5px solid #1f9;
+            padding-left: 20px;
+            text-shadow: 0 0 3px #1f9;
+        }
+
+        .doc-content h3 {
+            color: #afd7af;
+            margin: 25px 0 10px;
+            font-size: 1.3rem;
+            text-decoration: underline #2f9 1px;
+        }
+
+        .doc-content p {
+            margin-bottom: 15px;
+        }
+
+        .redacted {
+            background: #1f3f1f;
+            color: #1f3f1f;
+            padding: 0 5px;
+            border-radius: 3px;
+            font-family: inherit;
+            transition: 0.2s;
+            cursor: default;
+            border: 1px solid #3f9;
+        }
+
+        .redacted:hover {
+            color: #9f9;
+            background: #1a3f1a;
+        }
+
+        .warning-block {
+            border: 2px solid #1f9;
+            background: #0a1f0a;
+            padding: 20px;
+            margin: 25px 0;
+            color: #cfc;
+            font-weight: bold;
+            box-shadow: 0 0 25px #1f9;
+            text-transform: uppercase;
+        }
+
+        .level-badge {
+            color: #f99;
+            background: #2a0f0f;
+            border: 1px solid #f66;
+            padding: 3px 10px;
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .archive-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+
+        .clickable-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #bfffbf;
+            text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a;
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 3px solid transparent;
+            padding: 20px 40px;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            background: rgba(10, 30, 10, 0.5);
+            border-radius: 60px;
+            backdrop-filter: blur(6px);
+            margin-bottom: 40px;
+            animation: titleGlitch 5s infinite;
+        }
+
+        @keyframes titleGlitch {
+            0% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
+            10% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
+            20% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+            30% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
+            100% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
+        }
+
+        .clickable-title:hover {
+            transform: scale(1.07);
+            border-color: #8f9;
+            box-shadow: 0 0 70px #2f9;
+        }
+
+        .hidden-message {
+            max-width: 750px;
+            background: rgba(5, 20, 5, 0.9);
+            border-left: 8px solid #1f9;
+            padding: 30px;
+            border-radius: 20px;
+            color: #d7f7d7;
+            font-size: 1.4rem;
+            line-height: 1.7;
+            box-shadow: 0 0 50px #1f9;
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s, transform 0.6s;
+            pointer-events: none;
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+
+        .hidden-message.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .auth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .auth-table th, .auth-table td {
+            border: 1px solid #1f9;
+            padding: 10px;
+            text-align: left;
+        }
+        .auth-table th {
+            background: #0f2a0f;
+            color: #9f9;
+            text-transform: uppercase;
+        }
+        .auth-table tr:nth-child(even) {
+            background: #0a1a0a;
+        }
+
+        footer {
+            background: #071007;
+            border-top: 2px solid #1f9;
+            padding: 15px;
+            text-align: center;
+            color: #4f8a4f;
+            position: relative;
+            z-index: 5;
+        }
+
+        footer p {
+            animation: footerGlitch 4s infinite;
+        }
+
+        @keyframes footerGlitch {
+            0% { opacity: 0.8; }
+            5% { opacity: 0.4; transform: skew(1deg); }
+            10% { opacity: 0.8; transform: skew(0); }
+        }
+
+        @media (max-width: 800px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .side-nav {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #1f9;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 15px;
+            }
+            .side-nav .nav-link, .side-nav .nav-parent {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            .clickable-title {
+                font-size: 2.5rem;
+                letter-spacing: 5px;
+            }
+        }
+
+        .search-container {
+            margin-top: 20px;
+        }
+        .search-results {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px dashed #1f9;
+            padding: 10px;
+        }
+        .search-results li {
+            margin: 5px 0;
+        }
+        .search-results a {
+            color: #9f9;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+            border-left: 2px solid transparent;
+        }
+        .search-results a:hover {
+            background: #1f3f1f;
+            border-left-color: #1f9;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="snake-logo">⚔️🐍⚔️</div>
+        <div class="org-name">SERPENT'S HAND<span>архив Развлечудова</span></div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Левая навигация -->
+        <nav class="side-nav" id="sideNav">
+            <div class="terminal-button" id="terminalButton">ТЕРМИНАЛ</div>
+            <div class="nav-header">✦ НАВИГАЦИЯ ✦</div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-page="oznakomlenie">📖 Архив Развлечудова</a>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-parent" data-parent="archives" id="archivesParent">Архивы <span class="arrow">▶</span></span>
+                <ul class="submenu" id="sub-archives">
+                    <li><a href="#" class="nav-link" data-page="project-black-snake">Проект Черный змей</a></li>
+                    <li><a href="#" class="nav-link" data-page="deleted-archives">Удаленные архивы</a></li>
+                    <li><a href="#" class="nav-link" data-page="auth-database">База авторизованных сотрудников</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-parent" data-parent="ovb">Агенты ОВБ <span class="arrow">▶</span></span>
+                <ul class="submenu" id="sub-ovb">
+                    <li><a href="#" class="nav-link" data-page="agent-cippretto">Агент Сипретто</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-parent" data-parent="mog" id="mogParent">Архивы МОГ <span class="arrow">▶</span></span>
+                <ul class="submenu" id="sub-mog">
+                    <li><a href="#" class="nav-link" data-page="mog-unit-7">МОГ-7 (заглушка)</a></li>
+                    <li><a href="#" class="nav-link" data-page="mog-unit-12">МОГ-12 (заглушка)</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-parent" data-parent="zones">ЗОНЫ-Спец.Назначения <span class="arrow">▶</span></span>
+                <ul class="submenu" id="sub-zones">
+                    <li><a href="#" class="nav-link" data-page="zone-8">ЗОНА-8</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-parent" data-parent="events">Ивенты <span class="arrow">▶</span></span>
+                <ul class="submenu" id="sub-events">
+                    <li><a href="#" class="nav-link" data-page="protocol-matrix">Протокол-Матрица!?</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Модальное окно для Архивов (пароль 5514) -->
+        <div class="modal-overlay" id="archiveModal">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>ДОСТУП К АРХИВАМ</h2>
+                <input type="password" id="accessCode" placeholder="****" maxlength="4" autofocus>
+                <div class="modal-error" id="modalError"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn" id="submitCode">ВВОД</button>
+                    <button class="modal-btn" id="closeModal">ЗАКРЫТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для Архивов МОГ (пароль 5514) -->
+        <div class="modal-overlay" id="mogModal">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>ДОСТУП К АРХИВАМ МОГ</h2>
+                <input type="password" id="mogAccessCode" placeholder="****" maxlength="4" autofocus>
+                <div class="modal-error" id="mogModalError"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn" id="submitMogCode">ВВОД</button>
+                    <button class="modal-btn" id="closeMogModal">ЗАКРЫТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для Базы авторизованных сотрудников (пароль 5114) -->
+        <div class="modal-overlay" id="authDbPasswordModal">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>ДОСТУП К БАЗЕ</h2>
+                <input type="password" id="authDbPassword" placeholder="****" maxlength="4" autofocus>
+                <div class="modal-error" id="authDbPasswordError"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn" id="submitAuthDbPassword">ВВОД</button>
+                    <button class="modal-btn" id="closeAuthDbPassword">ЗАКРЫТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для авторизации в Базе (УД, класс, ФИО) -->
+        <div class="modal-overlay" id="authDbAuthModal">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>АВТОРИЗАЦИЯ</h2>
+                <input type="number" id="authDbLevel" placeholder="Уровень допуска (УД)" autofocus>
+                <input type="text" id="authDbClass" placeholder="Класс персонала">
+                <input type="text" id="authDbName" placeholder="ФИО сотрудника">
+                <div class="modal-error" id="authDbAuthError"></div>
+                <div class="modal-buttons">
+                    <button class="modal-btn" id="submitAuthDbAuth">ВОЙТИ</button>
+                    <button class="modal-btn" id="closeAuthDbAuth">ЗАКРЫТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно Терминала -->
+        <div class="modal-overlay" id="terminalModal">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <h2>ТЕРМИНАЛ ДОСТУПА</h2>
+                <div id="terminalAuthFields">
+                    <input type="number" id="level" placeholder="Уровень доступа" min="0" autofocus>
+                    <input type="text" id="class" placeholder="Класс персонала">
+                    <input type="text" id="rank" placeholder="Звание/должность">
+                    <input type="text" id="employeeName" placeholder="ФИО сотрудника">
+                    <div class="modal-error" id="terminalError"></div>
+                    <div class="modal-buttons">
+                        <button class="modal-btn" id="terminalLogin">АВТОРИЗОВАТЬСЯ</button>
+                        <button class="modal-btn" id="closeTerminal">ЗАКРЫТЬ</button>
+                    </div>
+                </div>
+                <div id="terminalSearchSection" style="display: none;">
+                    <p style="color: #9f9; text-align: center;">✅ АВТОРИЗАЦИЯ УСПЕШНА</p>
+                    <input type="text" id="searchKeywords" placeholder="Введите ключевое слово..." style="width: 100%; margin-bottom: 15px;">
+                    <div class="search-results" id="searchResults"></div>
+                    <div class="modal-buttons">
+                        <button class="modal-btn" id="closeTerminalAfter">ЗАКРЫТЬ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая область с контентом -->
+        <main class="content-area">
+            <!-- Страница: Архив Развлечудова -->
+            <div id="oznakomlenie" class="page active-page">
+                <div class="archive-page">
+                    <div class="clickable-title" id="archiveTitle">АРХИВ РАЗВЛЕЧУДОВА</div>
+                    <div class="hidden-message" id="welcomeMessage">
+                        Хай... это я ваш любимый Доктор Развлечудов. И да, это мой небольшой архив, где я собираю самые захватывающие истории. Думаю, ты найдешь что-то себе по душе. Чтобы заказать мои творения тебе нужно прочитать архив. В вкладке Архивы и в удаленных архивах ты найдешь нужную тебе ссылку! Удачи :)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Проект Черный змей -->
+            <div id="project-black-snake" class="page">
+                <div class="scp-document">
+                    <div class="doc-header"><h1>Проект Черный змей</h1><div class="meta">Уровень доступа: 5</div></div>
+                    <div class="doc-content"><p>Информация по данному проекту засекречена. Обратитесь к куратору.</p></div>
+                </div>
+            </div>
+
+            <!-- Страница: Удаленные архивы -->
+            <div id="deleted-archives" class="page">
+                <div class="scp-document">
+                    <div class="doc-header"><h1>Удаленные архивы</h1></div>
+                    <div class="doc-content"><p>Архивные материалы, восстановленные после инцидентов. Требуется специальное разрешение.</p></div>
+                </div>
+            </div>
+
+            <!-- Страница: База авторизованных сотрудников -->
+            <div id="auth-database" class="page">
+                <div class="scp-document">
+                    <div class="doc-header">
+                        <h1>База авторизованных сотрудников</h1>
+                        <div class="meta">Журнал успешных входов</div>
+                    </div>
+                    <div class="doc-content">
+                        <table class="auth-table" id="authLogTable">
+                            <thead>
+                                <tr><th>Дата/время</th><th>ФИО</th><th>Класс</th><th>Звание</th><th>Уровень</th></tr>
+                            </thead>
+                            <tbody id="authLogBody"></tbody>
+                        </table>
+                        <button class="modal-btn" id="clearAuthLog" style="margin-top: 20px;">ОЧИСТИТЬ ЖУРНАЛ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: МОГ-7 -->
+            <div id="mog-unit-7" class="page">
+                <div class="scp-document">
+                    <div class="doc-header"><h1>МОГ-7</h1></div>
+                    <div class="doc-content"><p>Информация о мобильной оперативной группе МОГ-7 отсутствует.</p></div>
+                </div>
+            </div>
+
+            <!-- Страница: МОГ-12 -->
+            <div id="mog-unit-12" class="page">
+                <div class="scp-document">
+                    <div class="doc-header"><h1>МОГ-12 «12 отряд короля»</h1></div>
+                    <div class="doc-content"><p>Сверхсекретная группа, приписанная к ЗОНЕ-8. Подробности засекречены.</p></div>
+                </div>
+            </div>
+
+            <!-- ========== ПОЛНОЕ ДОСЬЕ АГЕНТА СИПРЕТТО ========== -->
+            <div id="agent-cippretto" class="page">
+                <div class="scp-document">
+                    <div class="doc-header">
+                        <h1>Досье сотрудника ЗОНЫ-7</h1>
+                        <div class="meta">SCP-7-1 | Уровень допуска: <span class="level-badge">ОТСУТСТВУЕТ</span></div>
+                    </div>
+                    <div class="doc-content">
+                        <p><strong>ФИО:</strong> Сипретто <span class="redacted">[ДАННЫЕ ОТСУТСТВУЮТ]</span></p>
+                        <p><strong>Профессия:</strong> Подготовка спец агентов ОВБ.</p>
+                        
+                        <h2>Характеристика</h2>
+                        <p>Сотрудник Сипретто <span class="redacted">[ДАННЫЕ УДАЛЕНЫ]</span> получил 3 высших образования, отличился хорошей физической подготовкой и высокими интеллектуальными данными. После школы поступил в университет США, окончил его с отличием и продолжил обучение, получив 3 высших образования и степень магистра физических наук. После этого получил гражданство США и дважды прошёл подготовку морского котика. Затем отслужил полтора года в ВС США и вернулся на родину в Россию. Получил приглашение в Фонд, быстро его принял и встал на службу <span class="redacted">[ДАННЫЕ УДАЛЕНЫ]</span>.</p>
+                        <p>Всего через полгода работы в Фонде занял должность в ОВБ. Его конкретное звание засекречено — утеряно в связи с аномалией, связанной с ЗОНА-7.</p>
+                        <p>Сипретто <span class="redacted">[ДАННЫЕ УДАЛЕНЫ]</span> работал на объекте, именуемом ЗОНА-7, до инцидента, после которого ЗОНА-7 была признана заблокированной. Сотрудник был переведен в отставку на неопределённый срок в связи с его состоянием. В 1997 г. сотрудник находился на службе разведки.</p>
+                        <p><strong>Изменено:</strong> В настоящее время (2008 г.) сотрудник Сипретто <span class="redacted">[ДАННЫЕ УДАЛЕНЫ]</span> находится под наблюдением DIRA и ОВБ на объекте ЗОНА-8. Его состояние строго засекречено, доступ выдаётся с 4 уровня допуска.</p>
+                        
+                        <h2>ОУС (особые условия содержания)</h2>
+                        <p>Камера scp-7-1 находится на объекте ЗОНА-8 <span class="redacted">[ДАННЫЕ ЗАСЕКРЕЧЕНЫ]</span>.</p>
+                        
+                        <h2>Инцидент SCP-7-1 (1b)</h2>
+                        <p>Во время одной из проверок на юмы (обусловленной непосредственным нахождением сотрудника в инциденте ЗОНЫ-7) счетчик Канта выдал <span class="redacted">[ДАННЫЕ ЗАСЕКРЕЧЕНЫ]</span> количество юм, превышающее норму. После этого Сипретто присвоили класс SCP-объекта — <span class="redacted">[АРХОНТ]</span> и номер SCP-7-1.</p>
+                        <p>После инцидента SCP-7-1(1b) подобных случаев произошло еще несколько. Были выявлены закономерности, при которых SCP-объект переходил в активную фазу 7-1(A).</p>
+                        
+                        <h3>Описание аномалии</h3>
+                        <p>Когда объект испытывает сильные гневные эмоции, его тело начинает буквально излучать аномальное количество юм. Отмечается, что в радиусе 5–6 м (где центром окружности является сама аномалия) пространство-время не изменяется. В радиусе 7–10 м объекты подвергаются воздействию аномалии: предметы во второй окружности меняют цвет и полностью перестраивают свою атомную структуру.</p>
+                        <p>Например, кружка сотрудника, стоявшая на столе, изменила свою структуру на материал стола, но не изменила форму и размер. Все предметы меняют структуру, но никогда не меняют форму и размер. Предполагается, что аномалия определенным образом влияет на предметы из-за обстоятельств, при которых она была вызвана. Сам SCP не управляет аномалией, а является её переносчиком (проводником). Сила и продолжительность аномалии напрямую зависят от раздражителя и силы агрессии объекта.</p>
+                        
+                        <h2>Обряд-12</h2>
+                        <div class="warning-block">⚠ ЭКСТРЕМАЛЬНО ОПАСНО ⚠</div>
+                        <p>Аномалия также может быть вызвана определенным обрядом, именуемым «Обряд-12». Он заключается в следующем: сотрудник Д-Класса заходит в камеру к объекту и наносит SCP-7-1 любое увечье специальным ножом из нержавеющей стали, так как кровь объекта приобрела эффект сильной коррозии из-за концентрации неизвестного вещества.</p>
+                        <p>После нанесения ранения Д-Класс ликвидируется, так как объект начинает излучать чрезвычайно сильные аномальные кольца (проявление аномалии), искривляющие пространство-время. В данной версии аномалии отсутствуют 1-е и 2-е кольца (безопасное и опасное). Существует только опасная аномальная зона, распространяющаяся на десятки метров (точный радиус неизвестен из-за силы аномалии).</p>
+                        <p>Во время проведения первого «Обряда-12» Д-Класс испытывал сильную тревожность. После нанесения ранения он начал издавать громкие звуки (120 дБ) и был ликвидирован охраной. При вскрытии на теле были обнаружены кожные отростки и формирующиеся в них костные хрящи. Голосовые связки оказались необратимо изменены: их структура нарушена, ткани покрыты рваными повреждениями. Было установлено, что смерть наступила не от огнестрельного ранения в голову, а от обильного внутреннего кровотечения. При вскрытии выявлено отсутствие 70% крови при отсутствии внешних манипуляций с телом. Со слов охраны, в помещении проведения эксперимента стоял резкий запах, напоминающий запекшуюся кровь.</p>
+                        <p>После этого инцидента подобные эксперименты не проводились в связи с чрезвычайной опасностью и секретностью.</p>
+                        <p>В данный момент для SCP-7-1 создана сверхсекретная группа «12 отряд короля». Также Фонд работает над созданием отдельной зоны для объектов такого типа и специализированной группы экспертов. Природа аномалии остаётся нераскрытой, так как сотрудники с доступом к данной информации отсутствуют либо не специализируются в этой области. Сотрудники DIRA неоднократно пытались узнать у объекта, что произошло в ЗОНЕ-7, однако SCP-7-1 подсознательно игнорирует этот вопрос: активности в соответствующей зоне мозга не наблюдается.</p>
+                        <p>Остальные данные <span class="redacted">[ОЖИДАЮТ РАССЕКРЕЧИВАНИЯ]</span>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== ПОЛНОЕ ДОСЬЕ ЗОНА-8 ========== -->
+            <div id="zone-8" class="page">
+                <div class="scp-document">
+                    <div class="doc-header">
+                        <h1>Досье Учреждения Фонда SCP</h1>
+                        <div class="meta">ЗОНА-8 | RUR-KBR-Site-8</div>
+                    </div>
+                    <div class="doc-content">
+                        <h2>Общая информация</h2>
+                        <p><strong>Официальное обозначение:</strong> Высокогорное учреждение исследования и содержания «ЗОНА-8»</p>
+                        <p><strong>Идентификационный код Зоны:</strong> RUR-KBR-Site-8</p>
+                        <p><strong>Дата основания:</strong> ██.██.2005 года</p>
+                        <p><strong>Директор-учредитель:</strong> Д-р ██████████</p>
+                        <p><strong>Текущий директор:</strong> Д-р Ковалев А.И.</p>
+                        <p><strong>Назначение:</strong> Сдерживание и исследование SCP-7-1, а также последующее содержание объектов класса АРХОНТ и иных аномалий, способных вызывать значительные искажения пространства-времени.</p>
+                        <p><strong>Расположение:</strong> массив Гора Дыхтау, Российская Федерация</p>
+                        <p><strong>Прикрытие:</strong> Высокогорная геофизическая станция мониторинга тектонической активности</p>
+                        <p><strong>Высота размещения камеры SCP-7-1:</strong> ~5000 м</p>
+                        <p><strong>Глубина комплекса:</strong> 3700–5000 м</p>
+                        <p><strong>Статус:</strong> Действующий</p>
+
+                        <h2>Сектора зоны</h2>
+                        <p>ЗОНА-8 представляет собой вертикально интегрированный высокогорный комплекс, встроенный непосредственно в толщу горного массива. Верхний уровень, расположенный на высоте около 5000 м, отведен под камеру содержания SCP-7-1. Камера размещена в искусственно сформированной полости размером 20×20 м. В центре полости установлен защитный куб из нержавеющей стали толщиной 5 метров, обеспечивающий физическую изоляцию объекта. Данный уровень полностью автономен и отделен от остальных частей комплекса усиленными герметичными переборками.</p>
+                        
+                        <h3>Этаж 1 (3700–3900 м) — административный уровень</h3>
+                        <p>Крыло 1 — Центральный командный пункт и кабинет директора.<br>
+                        Крыло 2 — Отдел внутренней безопасности и архив документации.<br>
+                        Крыло 3 — Центр связи и мониторинга.</p>
+                        
+                        <h3>Этаж 2 (3900–4100 м) — исследовательский уровень</h3>
+                        <p>Крыло 1 — Лаборатории анализа физических свойств SCP-7-1.<br>
+                        Крыло 2 — Сектор моделирования и расчётов.<br>
+                        Крыло 3 — Центр обработки данных и серверный комплекс.</p>
+                        
+                        <h3>Этаж 3 (4100–4300 м) — технический уровень</h3>
+                        <p>Крыло 1 — Инженерно-техническая служба.<br>
+                        Крыло 2 — Энергетический узел и резервные генераторы.<br>
+                        Крыло 3 — Система жизнеобеспечения комплекса.</p>
+                        
+                        <h3>Этаж 4 (4300–4500 м) — медицинский и жилой сектор</h3>
+                        <p>Крыло 1 — Медицинский блок.<br>
+                        Крыло 2 — Реабилитационный сектор.<br>
+                        Крыло 3 — Жилые помещения персонала.</p>
+                        
+                        <h3>Этаж 5 (4500–4700 м) — изолированный научный сектор повышенной безопасности</h3>
+                        <p>Крыло 1 — Лаборатории повышенного риска.<br>
+                        Крыло 2 — Камеры временного содержания.<br>
+                        Крыло 3 — Контрольный узел доступа к верхним уровням.</p>
+                        <p>Все этажи соединены системой вертикальных лифтов, аварийных лестничных шахт и изолирующих шлюзов. Комплекс рассчитан на длительную автономную работу в условиях полной изоляции от внешней среды.</p>
+
+                        <h2>Сведения о персонале</h2>
+                        <h3>Руководящий состав</h3>
+                        <p>
+                            Директор Зоны: Д-р Ковалев А.И.<br>
+                            Директор по содержанию (верхние уровни, 4700–5000 м): Д-р ██████████<br>
+                            Директор по содержанию (исследовательский сектор, 3700–4700 м): Д-р Назаров<br>
+                            Замдиректора по персоналу: Д-р Громова<br>
+                            Замдиректора по исследованиям: Д-р Ермолов<br>
+                            Замдиректора по опергруппам и охране: «Страж»<br>
+                            Куратор программ содержания объектов класса АРХОНТ: куратор ███████<br>
+                            Руководитель Административной службы: Д-р Волынцев<br>
+                            Руководитель Научной службы: Д-р Тарасов<br>
+                            Руководитель Инженерно-технической службы: ████████ В.П.<br>
+                            Руководитель Медицинской службы: Д-р Миронова<br>
+                            Руководитель Службы разведки: И.С. Артемьев<br>
+                            Руководитель Департамента IT: с.н.с. Белов<br>
+                            Руководитель Отдела Внешних Связей: Д-р Ковалев А.И. (исполняющий обязанности)<br>
+                            Руководитель Отдела Классификации и Стандартизации: Д-р Чернов<br>
+                            Руководитель Отдела Логистики: Агент «Беркут»<br>
+                            Руководитель Отдела Истории и Аналитики: Д-р Лебедев<br>
+                            Куратор Отдела Внутренней Безопасности: ███████<br>
+                            Председатель Комитета по Этике (ЗОНА-8): Д-р Малинин (представленный сотрудник к ЗОНА-8)<br>
+                            Связь с зарубежными филиалами Фонда SCP: Старший координатор ███████<br>
+                            Назначенный РИИ комплекса: Aegis-8.aic
+                        </p>
+                        
+                        <h3>Постоянный персонал: 612 сотрудников</h3>
+                        <p>
+                            Докторский состав — 74<br>
+                            Исследовательский персонал — 128<br>
+                            Инженерно-техническая служба — 96<br>
+                            Служба безопасности — 142<br>
+                            МОГ — 58 («12 отряд короля»)<br>
+                            Медицинская служба — 37<br>
+                            Класс D — 51<br>
+                            Прочие сотрудники — 26
+                        </p>
+
+                        <h2>История основания</h2>
+                        <p>ЗОНА-8 была основана в 2005 году для сдерживания объекта SCP-7-1. После принятия решения о невозможности его транспортировки в существующие учреждения Фонда было утверждено строительство специализированного комплекса — в массиве Гора Дыхтау. Проект изначально предусматривал максимальную физическую изоляцию, глубинное размещение уровней и автономность систем. К концу 2005 года камера содержания была введена в эксплуатацию, и ЗОНА-8 официально начала функционировать как стратегический объект Российского филиала Фонда SCP. Также ЗОНА-8 была базой для МОГ специального назначения «12 отряд короля».</p>
+                        <p>Остальные данные <span class="redacted">[ОЖИДАЮТ РАССЕКРЕЧИВАНИЯ]</span>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Протокол-Матрица!? -->
+            <div id="protocol-matrix" class="page">
+                <div class="scp-document">
+                    <div class="doc-header"><h1>Протокол-Матрица!?</h1></div>
+                    <div class="doc-content"><p>Экстренный протокол, активируемый при искажении реальности.</p></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>Змеиная Рука / Serpent's Hand • Архив Доктора Развлечудова</p>
+        <p style="font-size:0.8rem;">❝ Знание — змея, что сбрасывает кожу ❞</p>
+    </footer>
+
+    <script>
+        (function() {
+            // ==================== ОСНОВНОЙ СПИСОК СОТРУДНИКОВ (ДЛЯ ТЕРМИНАЛА) ====================
+            const employees = [
+                { name: "Ковалев Артем Сергеевич", level: 5, class: "A", rank: "Директор участка 02" },
+                { name: "Смирнова Елена Викторовна", level: 4, class: "B", rank: "Ст научный сотрудник" },
+                { name: "Иванов Сергей Петрович", level: 4, class: "A", rank: "Капитан МОГ" },
+                { name: "Петрова Мария Александровна", level: 4, class: "B", rank: "СТ.лейтенант МОГ" },
+                { name: "Федоров Дмитрий Иванович", level: 3, class: "C", rank: "лейтенант МОГ" },
+                { name: "Васильева Ольга Сергеевна", level: 4, class: "A", rank: "Менеджер Лзс-тзс" },
+                { name: "Михайлов Николай Юрьевич", level: 5, class: "B", rank: "Директор Зоны" },
+                { name: "Соколова Анна Владимировна", level: 4, class: "C", rank: "Глава СБ" },
+                { name: "Кузнецов Алексей Дмитриевич", level: 4, class: "A", rank: "СТ.лейтенант СБ" },
+                { name: "Орлова Виктория Игоревна", level: 3, class: "B", rank: "лейтенант СБ" },
+                { name: "Лебедев Павел Андреевич", level: 4, class: "B", rank: "Глава нс" },
+                { name: "Морозова Ирина Константиновна", level: 3, class: "C", rank: "Глава мс" },
+                { name: "Никитин Артем Валерьевич", level: 4, class: "A", rank: "Агент \"В\"" },
+                { name: "Васильев Роман Сергеевич", level: 3, class: "B", rank: "Агент \"К\"" },
+                { name: "Голубев Денис Олегович", level: 4, class: "C", rank: "Ст научный сотрудник" },
+                { name: "Ермакова Светлана Игоревна", level: 4, class: "B", rank: "Менеджер Лзс-тзс" },
+                { name: "Тихонов Максим Евгеньевич", level: 4, class: "A", rank: "Капитан МОГ" },
+                { name: "Павлова Алина Сергеевна", level: 3, class: "C", rank: "СТ.лейтенант МОГ" },
+                { name: "Николаев Борис Андреевич", level: 4, class: "B", rank: "лейтенант МОГ" },
+                { name: "Дмитриева Юлия Павловна", level: 5, class: "A", rank: "Директор Зоны" },
+                { name: "Сидоров Виктор Павлович", level: 4, class: "B", rank: "Глава СБ" },
+                { name: "Белова Марина Анатольевна", level: 3, class: "C", rank: "СТ.лейтенант СБ" },
+                { name: "Фролов Евгений Юрьевич", level: 4, class: "B", rank: "лейтенант СБ" },
+                { name: "Климова Оксана Викторовна", level: 4, class: "A", rank: "Глава нс" },
+                { name: "Жукова Наталья Сергеевна", level: 3, class: "B", rank: "Глава мс" },
+                { name: "Андреев Илья Сергеевич", level: 3, class: "C", rank: "Агент \"М\"" },
+                { name: "Савельев Константин Олегович", level: 4, class: "A", rank: "Капитан МОГ" },
+                { name: "Алексеева Виктория Дмитриевна", level: 4, class: "B", rank: "Ст научный сотрудник" },
+                { name: "Тарасов Николай Михайлович", level: 3, class: "C", rank: "Менеджер Лзс-тзс" },
+                { name: "Денисова Полина Андреевна", level: 4, class: "B", rank: "СТ.лейтенант МОГ" }
+            ];
+
+            // ==================== СПИСОК ДЛЯ БАЗЫ АВТОРИЗОВАННЫХ СОТРУДНИКОВ (ТОЛЬКО 3 ЧЕЛОВЕКА) ====================
+            const authDbEmployees = [
+                { name: "Доктор Развлечудов", level: 5, class: "A", rank: "Скульптор" },
+                { name: "Багров Данил", level: 5, class: "A", rank: "Правдоруб" },
+                { name: "Ярослав Андреевич", level: 5, class: "A", rank: "AA" }
+            ];
+
+            // ==================== РАБОТА С ЖУРНАЛОМ АВТОРИЗАЦИЙ ====================
+            const AUTH_LOG_KEY = 'authLog';
+
+            function getAuthLog() {
+                const log = localStorage.getItem(AUTH_LOG_KEY);
+                return log ? JSON.parse(log) : [];
+            }
+
+            function addAuthLog(employee) {
+                const log = getAuthLog();
+                const entry = {
+                    timestamp: new Date().toLocaleString('ru-RU'),
+                    name: employee.name,
+                    class: employee.class,
+                    rank: employee.rank,
+                    level: employee.level
+                };
+                log.unshift(entry);
+                localStorage.setItem(AUTH_LOG_KEY, JSON.stringify(log));
+                if (document.getElementById('auth-database').classList.contains('active-page')) {
+                    renderAuthLog();
+                }
+            }
+
+            function renderAuthLog() {
+                const tbody = document.getElementById('authLogBody');
+                if (!tbody) return;
+                const log = getAuthLog();
+                tbody.innerHTML = '';
+                log.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${entry.timestamp}</td>
+                        <td>${entry.name}</td>
+                        <td>${entry.class}</td>
+                        <td>${entry.rank}</td>
+                        <td>${entry.level}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            function clearAuthLog() {
+                localStorage.removeItem(AUTH_LOG_KEY);
+                renderAuthLog();
+            }
+
+            // ==================== ПРОВЕРКА ДЛЯ ТЕРМИНАЛА (ОСНОВНОЙ СПИСОК) ====================
+            function validateEmployee(name, rank) {
+                const normalizedName = name.trim().toLowerCase();
+                const normalizedRank = rank.trim().toLowerCase().replace(/\./g, '').replace(/\s+/g, ' ').trim();
+                return employees.find(emp => 
+                    emp.name.toLowerCase() === normalizedName && 
+                    emp.rank.toLowerCase().replace(/\./g, '').replace(/\s+/g, ' ').trim() === normalizedRank
+                );
+            }
+
+            // ==================== ПРОВЕРКА ДЛЯ БАЗЫ (ТРИ ПОЛЯ: УД, КЛАСС, ФИО) ====================
+            function validateAuthDb(level, className, name) {
+                const normalizedName = name.trim().toLowerCase();
+                const normalizedClass = className.trim().toLowerCase();
+                return authDbEmployees.find(emp => 
+                    emp.name.toLowerCase() === normalizedName &&
+                    emp.class.toLowerCase() === normalizedClass &&
+                    emp.level === parseInt(level)
+                );
+            }
+
+            // ==================== ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ====================
+            const navLinks = document.querySelectorAll('.nav-link[data-page]');
+            const pages = document.querySelectorAll('.page');
+
+            function showPage(pageId) {
+                pages.forEach(p => {
+                    if (p.id === pageId) {
+                        p.classList.add('active-page');
+                        if (pageId === 'auth-database') renderAuthLog();
+                    } else {
+                        p.classList.remove('active-page');
+                    }
+                });
+                navLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = Array.from(navLinks).find(link => link.getAttribute('data-page') === pageId);
+                if (activeLink) activeLink.classList.add('active');
+                window.location.hash = pageId;
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId === 'auth-database') {
+                        if (sessionStorage.getItem('authDbAccess') === 'granted') {
+                            showPage(pageId);
+                        } else {
+                            openAuthDbPasswordModal();
+                        }
+                    } else {
+                        showPage(pageId);
+                    }
+                });
+            });
+
+            // Раскрытие подменю
+            const parents = document.querySelectorAll('.nav-parent:not([data-parent="archives"]):not([data-parent="mog"])');
+            parents.forEach(parent => {
+                parent.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.classList.toggle('active');
+                    const submenu = this.nextElementSibling;
+                    if (submenu && submenu.classList.contains('submenu')) {
+                        submenu.classList.toggle('active');
+                    }
+                });
+            });
+
+            // ==================== МОДАЛЬНОЕ ОКНО ДЛЯ АРХИВОВ (пароль 5514) ====================
+            const archivesParent = document.getElementById('archivesParent');
+            const subArchives = document.getElementById('sub-archives');
+            const archiveModal = document.getElementById('archiveModal');
+            const archiveInput = document.getElementById('accessCode');
+            const archiveError = document.getElementById('modalError');
+            const submitCode = document.getElementById('submitCode');
+            const closeModal = document.getElementById('closeModal');
+            const ACCESS_CODE = "5514";
+
+            function openArchiveModal() {
+                archiveModal.classList.add('active');
+                archiveInput.value = '';
+                archiveError.textContent = '';
+                archiveInput.focus();
+            }
+
+            function closeArchiveModal() {
+                archiveModal.classList.remove('active');
+            }
+
+            function checkArchiveCode() {
+                if (archiveInput.value === ACCESS_CODE) {
+                    closeArchiveModal();
+                    archivesParent.classList.add('active');
+                    subArchives.classList.add('active');
+                } else {
+                    archiveError.textContent = '⚠ ДОСТУП ЗАПРЕЩЁН ⚠';
+                    archiveInput.style.borderColor = '#f66';
+                    archiveInput.style.boxShadow = '0 0 20px #f00';
+                    setTimeout(() => {
+                        archiveInput.style.borderColor = '#1f9';
+                        archiveInput.style.boxShadow = '0 0 15px #1f9';
+                    }, 300);
+                }
+            }
+
+            archivesParent.addEventListener('click', function(e) {
+                e.preventDefault();
+                openArchiveModal();
+            });
+
+            submitCode.addEventListener('click', checkArchiveCode);
+            archiveInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkArchiveCode();
+            });
+            closeModal.addEventListener('click', closeArchiveModal);
+            archiveModal.addEventListener('click', function(e) {
+                if (e.target === archiveModal) closeArchiveModal();
+            });
+
+            // ==================== МОДАЛЬНОЕ ОКНО ДЛЯ АРХИВОВ МОГ (пароль 5514) ====================
+            const mogParent = document.getElementById('mogParent');
+            const subMog = document.getElementById('sub-mog');
+            const mogModal = document.getElementById('mogModal');
+            const mogInput = document.getElementById('mogAccessCode');
+            const mogError = document.getElementById('mogModalError');
+            const submitMogCode = document.getElementById('submitMogCode');
+            const closeMogModal = document.getElementById('closeMogModal');
+            const MOG_CODE = "5514";
+
+            function openMogModal() {
+                mogModal.classList.add('active');
+                mogInput.value = '';
+                mogError.textContent = '';
+                mogInput.focus();
+            }
+
+            function closeMogModalFunc() {
+                mogModal.classList.remove('active');
+            }
+
+            function checkMogCode() {
+                if (mogInput.value === MOG_CODE) {
+                    closeMogModalFunc();
+                    mogParent.classList.add('active');
+                    subMog.classList.add('active');
+                } else {
+                    mogError.textContent = '⚠ ДОСТУП ЗАПРЕЩЁН ⚠';
+                    mogInput.style.borderColor = '#f66';
+                    mogInput.style.boxShadow = '0 0 20px #f00';
+                    setTimeout(() => {
+                        mogInput.style.borderColor = '#1f9';
+                        mogInput.style.boxShadow = '0 0 15px #1f9';
+                    }, 300);
+                }
+            }
+
+            mogParent.addEventListener('click', function(e) {
+                e.preventDefault();
+                openMogModal();
+            });
+
+            submitMogCode.addEventListener('click', checkMogCode);
+            mogInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkMogCode();
+            });
+            closeMogModal.addEventListener('click', closeMogModalFunc);
+            mogModal.addEventListener('click', function(e) {
+                if (e.target === mogModal) closeMogModalFunc();
+            });
+
+            // ==================== МОДАЛЬНЫЕ ОКНА ДЛЯ БАЗЫ АВТОРИЗОВАННЫХ СОТРУДНИКОВ ====================
+            const authDbPasswordModal = document.getElementById('authDbPasswordModal');
+            const authDbAuthModal = document.getElementById('authDbAuthModal');
+            const authDbPasswordInput = document.getElementById('authDbPassword');
+            const authDbPasswordError = document.getElementById('authDbPasswordError');
+            const submitAuthDbPassword = document.getElementById('submitAuthDbPassword');
+            const closeAuthDbPassword = document.getElementById('closeAuthDbPassword');
+            const authDbLevel = document.getElementById('authDbLevel');
+            const authDbClass = document.getElementById('authDbClass');
+            const authDbName = document.getElementById('authDbName');
+            const authDbAuthError = document.getElementById('authDbAuthError');
+            const submitAuthDbAuth = document.getElementById('submitAuthDbAuth');
+            const closeAuthDbAuth = document.getElementById('closeAuthDbAuth');
+            const AUTH_DB_PASSWORD = "5114";
+
+            function openAuthDbPasswordModal() {
+                authDbPasswordModal.classList.add('active');
+                authDbPasswordInput.value = '';
+                authDbPasswordError.textContent = '';
+                authDbPasswordInput.focus();
+            }
+
+            function closeAuthDbPasswordModal() {
+                authDbPasswordModal.classList.remove('active');
+            }
+
+            function openAuthDbAuthModal() {
+                authDbAuthModal.classList.add('active');
+                authDbLevel.value = '';
+                authDbClass.value = '';
+                authDbName.value = '';
+                authDbAuthError.textContent = '';
+                authDbLevel.focus();
+            }
+
+            function closeAuthDbAuthModal() {
+                authDbAuthModal.classList.remove('active');
+            }
+
+            submitAuthDbPassword.addEventListener('click', function() {
+                if (authDbPasswordInput.value === AUTH_DB_PASSWORD) {
+                    closeAuthDbPasswordModal();
+                    openAuthDbAuthModal();
+                } else {
+                    authDbPasswordError.textContent = '⚠ НЕВЕРНЫЙ ПАРОЛЬ ⚠';
+                    authDbPasswordInput.style.borderColor = '#f66';
+                    authDbPasswordInput.style.boxShadow = '0 0 20px #f00';
+                    setTimeout(() => {
+                        authDbPasswordInput.style.borderColor = '#1f9';
+                        authDbPasswordInput.style.boxShadow = '0 0 15px #1f9';
+                    }, 300);
+                }
+            });
+
+            closeAuthDbPassword.addEventListener('click', closeAuthDbPasswordModal);
+            authDbPasswordModal.addEventListener('click', function(e) {
+                if (e.target === authDbPasswordModal) closeAuthDbPasswordModal();
+            });
+
+            submitAuthDbAuth.addEventListener('click', function() {
+                const level = parseInt(authDbLevel.value.trim());
+                const className = authDbClass.value.trim();
+                const name = authDbName.value.trim();
+
+                if (!level || !className || !name) {
+                    authDbAuthError.textContent = '⚠ ЗАПОЛНИТЕ ВСЕ ПОЛЯ ⚠';
+                    return;
+                }
+
+                const employee = validateAuthDb(level, className, name);
+                if (employee) {
+                    closeAuthDbAuthModal();
+                    sessionStorage.setItem('authDbAccess', 'granted');
+                    addAuthLog(employee);
+                    showPage('auth-database');
+                } else {
+                    authDbAuthError.textContent = '⚠ НЕВЕРНЫЕ ДАННЫЕ ⚠';
+                    authDbLevel.style.borderColor = '#f66';
+                    authDbClass.style.borderColor = '#f66';
+                    authDbName.style.borderColor = '#f66';
+                    setTimeout(() => {
+                        authDbLevel.style.borderColor = '#1f9';
+                        authDbClass.style.borderColor = '#1f9';
+                        authDbName.style.borderColor = '#1f9';
+                    }, 300);
+                }
+            });
+
+            closeAuthDbAuth.addEventListener('click', closeAuthDbAuthModal);
+            authDbAuthModal.addEventListener('click', function(e) {
+                if (e.target === authDbAuthModal) closeAuthDbAuthModal();
+            });
+
+            // Кнопка очистки журнала
+            document.getElementById('clearAuthLog')?.addEventListener('click', function() {
+                if (confirm('Очистить журнал авторизаций?')) {
+                    clearAuthLog();
+                }
+            });
+
+            // ==================== ТЕРМИНАЛ ====================
+            const terminalButton = document.getElementById('terminalButton');
+            const terminalModal = document.getElementById('terminalModal');
+            const terminalAuth = document.getElementById('terminalAuthFields');
+            const terminalSearchSection = document.getElementById('terminalSearchSection');
+            const terminalError = document.getElementById('terminalError');
+            const levelInput = document.getElementById('level');
+            const classInput = document.getElementById('class');
+            const rankInput = document.getElementById('rank');
+            const employeeNameInput = document.getElementById('employeeName');
+            const loginBtn = document.getElementById('terminalLogin');
+            const closeTerminal = document.getElementById('closeTerminal');
+            const closeTerminalAfter = document.getElementById('closeTerminalAfter');
+            const searchInput = document.getElementById('searchKeywords');
+            const searchResults = document.getElementById('searchResults');
+
+            const pagesList = [
+                { id: 'oznakomlenie', name: 'Архив Развлечудова' },
+                { id: 'project-black-snake', name: 'Проект Черный змей' },
+                { id: 'deleted-archives', name: 'Удаленные архивы' },
+                { id: 'auth-database', name: 'База авторизованных сотрудников' },
+                { id: 'mog-unit-7', name: 'МОГ-7' },
+                { id: 'mog-unit-12', name: 'МОГ-12 «12 отряд короля»' },
+                { id: 'agent-cippretto', name: 'Агент Сипретто' },
+                { id: 'zone-8', name: 'ЗОНА-8' },
+                { id: 'protocol-matrix', name: 'Протокол-Матрица!?' }
+            ];
+
+            function openTerminal() {
+                terminalModal.classList.add('active');
+                terminalAuth.style.display = 'block';
+                terminalSearchSection.style.display = 'none';
+                levelInput.value = '';
+                classInput.value = '';
+                rankInput.value = '';
+                employeeNameInput.value = '';
+                terminalError.textContent = '';
+                levelInput.focus();
+            }
+
+            function closeTerminalFunc() {
+                terminalModal.classList.remove('active');
+            }
+
+            terminalButton.addEventListener('click', openTerminal);
+
+            function checkTerminal() {
+                const level = parseInt(levelInput.value.trim());
+                const className = classInput.value.trim();
+                const rank = rankInput.value.trim();
+                const employeeName = employeeNameInput.value.trim();
+
+                if (!level || !className || !rank || !employeeName) {
+                    terminalError.textContent = '⚠ ЗАПОЛНИТЕ ВСЕ ПОЛЯ ⚠';
+                    return;
+                }
+
+                if (level < 3) {
+                    terminalError.textContent = '⚠ УРОВЕНЬ СЛИШКОМ МАЛЕНЬКИЙ ⚠';
+                    return;
+                }
+
+                const employee = validateEmployee(employeeName, rank);
+                if (!employee) {
+                    terminalError.textContent = '⚠ НЕВЕРНЫЕ ДАННЫЕ ⚠';
+                    return;
+                }
+
+                addAuthLog(employee);
+
+                terminalAuth.style.display = 'none';
+                terminalSearchSection.style.display = 'block';
+                terminalError.textContent = '';
+
+                searchInput.value = '';
+                displaySearchResults('');
+            }
+
+            loginBtn.addEventListener('click', checkTerminal);
+            employeeNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkTerminal();
+            });
+
+            function displaySearchResults(query) {
+                const lowerQuery = query.toLowerCase();
+                const filtered = pagesList.filter(page => 
+                    page.name.toLowerCase().includes(lowerQuery)
+                );
+                searchResults.innerHTML = '';
+                filtered.forEach(page => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = page.name;
+                    a.setAttribute('data-page', page.id);
+                    a.classList.add('nav-link');
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        showPage(page.id);
+                        closeTerminalFunc();
+                    });
+                    li.appendChild(a);
+                    searchResults.appendChild(li);
+                });
+            }
+
+            searchInput.addEventListener('input', function() {
+                displaySearchResults(this.value);
+            });
+
+            closeTerminal.addEventListener('click', closeTerminalFunc);
+            closeTerminalAfter.addEventListener('click', closeTerminalFunc);
+            terminalModal.addEventListener('click', function(e) {
+                if (e.target === terminalModal) closeTerminalFunc();
+            });
+
+            // ==================== ОБРАБОТКА ХЭША ====================
+            function handleHash() {
+                let hash = window.location.hash.substring(1);
+                if (hash) {
+                    const exists = Array.from(navLinks).some(l => l.getAttribute('data-page') === hash);
+                    if (exists) {
+                        if (hash === 'auth-database' && !sessionStorage.getItem('authDbAccess')) {
+                            openAuthDbPasswordModal();
+                        } else {
+                            showPage(hash);
+                        }
+                    } else {
+                        showPage('oznakomlenie');
+                    }
+                } else {
+                    showPage('oznakomlenie');
+                }
+            }
+            window.addEventListener('hashchange', handleHash);
+            handleHash();
+
+            // ==================== ГЛАВНАЯ СТРАНИЦА: ПОЯВЛЕНИЕ ТЕКСТА ====================
+            const title = document.getElementById('archiveTitle');
+            const message = document.getElementById('welcomeMessage');
+            if (title && message) {
+                title.addEventListener('click', () => {
+                    message.classList.toggle('show');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
