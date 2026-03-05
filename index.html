@@ -1125,8 +1125,6 @@
             }
         }, msg.delay);
     });
-
-    sessionStorage.setItem('restoreAnimationShown', 'true');
 }
 
     // ==================== ЗВУКОВЫЕ ЭФФЕКТЫ ====================
@@ -1310,28 +1308,25 @@
     const pages = document.querySelectorAll('.page');
 
     function showPage(pageId) {
-        pages.forEach(p => {
-            if (p.id === pageId) {
-                p.classList.add('active-page');
-                if (pageId === 'auth-database') renderAuthLog();
-                if (pageId === 'deleted-archives') {
-                    const restoredDiv = document.getElementById('restoredFiles');
-                    if (!sessionStorage.getItem('restoreAnimationShown')) {
-                        startRestoreAnimation();
-                    } else {
-                        if (restoredDiv) restoredDiv.style.display = 'block';
-                    }
-                }
-            } else {
-                p.classList.remove('active-page');
+    pages.forEach(p => {
+        if (p.id === pageId) {
+            p.classList.add('active-page');
+            if (pageId === 'auth-database') renderAuthLog();
+            if (pageId === 'deleted-archives') {
+                const restoredDiv = document.getElementById('restoredFiles');
+                if (restoredDiv) restoredDiv.style.display = 'none';
+                startRestoreAnimation();
             }
-        });
-        navLinks.forEach(link => link.classList.remove('active'));
-        const activeLink = Array.from(navLinks).find(link => link.getAttribute('data-page') === pageId);
-        if (activeLink) activeLink.classList.add('active');
-        window.location.hash = pageId;
-    }
-
+        } else {
+            p.classList.remove('active-page');
+        }
+    });
+    navLinks.forEach(link => link.classList.remove('active'));
+    const activeLink = Array.from(navLinks).find(link => link.getAttribute('data-page') === pageId);
+    if (activeLink) activeLink.classList.add('active');
+    window.location.hash = pageId;
+}
+    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
