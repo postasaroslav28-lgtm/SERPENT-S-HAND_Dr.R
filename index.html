@@ -1087,61 +1087,47 @@
 (function() {
     // ==================== АНИМАЦИЯ ВОССТАНОВЛЕНИЯ АРХИВОВ ====================
     function startRestoreAnimation() {
-        const animDiv = document.getElementById('restoreAnimation');
-        const restoredDiv = document.getElementById('restoredFiles');
-        if (!animDiv || !restoredDiv) return;
+    const animDiv = document.getElementById('restoreAnimation');
+    const restoredDiv = document.getElementById('restoredFiles');
+    if (!animDiv || !restoredDiv) return;
 
-        animDiv.innerHTML = '';
+    animDiv.innerHTML = '';
 
-        const messages = [
-            { text: "Восстановление архивов...", delay: 0, sound: 'open', voice: "Restoring archives..." },
-            { text: "Загрузка... 25%", delay: 1500, sound: 'none', voice: "Loading... 25 percent" },
-            { text: "Загрузка... 50%", delay: 3000, sound: 'none', voice: "50 percent" },
-            { text: "Загрузка... 75%", delay: 4500, sound: 'none', voice: "75 percent" },
-            { text: "Восстановление прошло успешно...", delay: 6000, sound: 'success', voice: "Recovery successful" },
-            { text: "[ERROR] часть данных была утеряна...", delay: 7500, sound: 'error', voice: "Error. Some data lost" },
-            { text: "Доступ разрешен.", delay: 9000, sound: 'success', voice: "Access granted" }
-        ];
+    const messages = [
+        { text: "Восстановление архивов...", delay: 0, sound: 'open' },
+        { text: "Загрузка... 25%", delay: 1500, sound: 'none' },
+        { text: "Загрузка... 50%", delay: 3000, sound: 'none' },
+        { text: "Загрузка... 75%", delay: 4500, sound: 'none' },
+        { text: "Восстановление прошло успешно...", delay: 6000, sound: 'success' },
+        { text: "[ERROR] часть данных была утеряна...", delay: 7500, sound: 'error' },
+        { text: "Доступ разрешен.", delay: 9000, sound: 'success' }
+    ];
 
-        function speak(text) {
-            if (!window.speechSynthesis) return;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.9;
-            utterance.pitch = 0.8;
-            const voices = window.speechSynthesis.getVoices();
-            const maleVoice = voices.find(v => v.lang.includes('en') && v.name.toLowerCase().includes('male'));
-            if (maleVoice) utterance.voice = maleVoice;
-            window.speechSynthesis.speak(utterance);
-        }
+    messages.forEach(msg => {
+        setTimeout(() => {
+            const p = document.createElement('p');
+            p.textContent = msg.text;
+            p.style.margin = '5px 0';
+            p.style.opacity = '0';
+            p.style.transition = 'opacity 0.5s';
+            animDiv.appendChild(p);
+            setTimeout(() => p.style.opacity = '1', 50);
 
-        messages.forEach(msg => {
-            setTimeout(() => {
-                const p = document.createElement('p');
-                p.textContent = msg.text;
-                p.style.margin = '5px 0';
-                p.style.opacity = '0';
-                p.style.transition = 'opacity 0.5s';
-                animDiv.appendChild(p);
-                setTimeout(() => p.style.opacity = '1', 50);
+            if (msg.sound === 'open') playOpenSound();
+            else if (msg.sound === 'success') playSuccessSound();
+            else if (msg.sound === 'error') playErrorSound();
 
-                if (msg.sound === 'open') playOpenSound();
-                else if (msg.sound === 'success') playSuccessSound();
-                else if (msg.sound === 'error') playErrorSound();
+            if (msg === messages[messages.length-1]) {
+                setTimeout(() => {
+                    restoredDiv.style.display = 'block';
+                    restoredDiv.scrollIntoView({ behavior: 'smooth' });
+                }, 1000);
+            }
+        }, msg.delay);
+    });
 
-                if (msg.voice) speak(msg.voice);
-
-                if (msg === messages[messages.length-1]) {
-                    setTimeout(() => {
-                        restoredDiv.style.display = 'block';
-                        restoredDiv.scrollIntoView({ behavior: 'smooth' });
-                    }, 1000);
-                }
-            }, msg.delay);
-        });
-
-        sessionStorage.setItem('restoreAnimationShown', 'true');
-    }
+    sessionStorage.setItem('restoreAnimationShown', 'true');
+}
 
     // ==================== ЗВУКОВЫЕ ЭФФЕКТЫ ====================
     let audioCtx = null;
