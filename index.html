@@ -188,19 +188,20 @@
             align-items: center;
         }
 
+        /* ===== ИЗМЕНЁННЫЙ ЦВЕТ ВЫДЕЛЕНИЯ (ТЁМНО-БОРДОВЫЙ, МАТОВЫЙ) ===== */
         .side-nav .nav-link:hover, .side-nav .nav-parent:hover {
-            background: #f00;
-            border-left-color: #fff;
-            color: #000;
+            background: #660000;          /* тёмно-бордовый */
+            border-left-color: #aaa;       /* тусклая белая полоска */
+            color: #f0f0f0;                /* светлый текст */
             transform: translateX(3px);
-            box-shadow: 0 0 15px #f00;
+            box-shadow: 0 0 10px #660000;  /* мягкая тень */
         }
 
         .side-nav .nav-link.active, .side-nav .nav-parent.active {
-            background: #f00;
-            border-left-color: #fff;
-            color: #000;
-            box-shadow: 0 0 20px #f00;
+            background: #660000;
+            border-left-color: #aaa;
+            color: #f0f0f0;
+            box-shadow: 0 0 10px #660000;
         }
 
         .submenu {
@@ -1056,6 +1057,7 @@
             function initAudio() {
                 if (audioCtx) return;
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // для Chrome: нужно разрешение после взаимодействия с пользователем
             }
 
             function playErrorSound() {
