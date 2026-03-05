@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serpent's Hand | Архив Развлечудова</title>
     <style>
-        /* ========== СТИЛИ (полностью сохранены из предыдущей версии) ========== */
+        /* ========== НОВАЯ ЦВЕТОВАЯ СХЕМА: ЧЕРНО-СЕРАЯ С ЗЕЛЕНОЙ ОБВОДКОЙ ========== */
         * {
             margin: 0;
             padding: 0;
@@ -14,15 +14,17 @@
 
         body {
             font-family: 'Courier New', Courier, monospace;
-            background: #000005;
-            color: #000005;
+            background: #0a0a0a; /* очень темный фон */
+            color: #f0f0f0; /* белый текст */
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; /* зеленая обводка */
         }
 
+        /* Глитч-эффект фона (зеленый оттенок) */
         body::before {
             content: "";
             position: fixed;
@@ -30,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.03) 0px, rgba(0, 40, 0, 0.1) 2px, transparent 3px, transparent 5px);
+            background: repeating-linear-gradient(0deg, rgba(0, 255, 0, 0.03) 0px, rgba(0, 30, 0, 0.1) 2px, transparent 3px, transparent 5px);
             pointer-events: none;
             z-index: 1;
             animation: scan 10s linear infinite;
@@ -41,39 +43,40 @@
             100% { background-position: 0 30px; }
         }
 
+        /* Верхняя полоса */
         .top-bar {
-            background: #071007;
-            border-bottom: 2px solid #071007;
+            background: #1a1a1a; /* темно-серый */
+            border-bottom: 2px solid #0f0;
             padding: 12px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 0 25px #071007;
+            box-shadow: 0 0 25px #0f0;
             position: relative;
             z-index: 10;
-            border-image: repeating-linear-gradient(45deg, #071007, #071007 15px) 30;
+            border-image: repeating-linear-gradient(45deg, #0f0, #0a2b0a 15px) 30;
         }
 
         .snake-logo {
             font-size: 2.5rem;
-            filter: drop-shadow(0 0 8px #FFFFFF);
+            filter: drop-shadow(0 0 8px #0f0);
             animation: glowPulse 3s infinite;
             line-height: 1;
         }
 
         @keyframes glowPulse {
-            0% { filter: drop-shadow(0 0 2px #AD0700); text-shadow: 0 0 3px #0f0; }
-            50% { filter: drop-shadow(0 0 15px #AD0700); text-shadow: 0 0 10px #0f0; }
-            100% { filter: drop-shadow(0 0 2px ##AD0700); text-shadow: 0 0 3px #0f0; }
+            0% { filter: drop-shadow(0 0 2px #0f0); text-shadow: 0 0 3px #0f0; }
+            50% { filter: drop-shadow(0 0 15px #0f0); text-shadow: 0 0 10px #0f0; }
+            100% { filter: drop-shadow(0 0 2px #0f0); text-shadow: 0 0 3px #0f0; }
         }
 
         .org-name {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #030000;
+            color: #f0f0f0;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 0 0 8px #030000;
+            text-shadow: 0 0 8px #0f0;
             position: relative;
         }
 
@@ -90,10 +93,11 @@
         }
 
         .org-name span {
-            color: #030000;
+            color: #aaa;
             font-size: 1rem;
             margin-left: 10px;
             letter-spacing: 1px;
+            text-shadow: none; /* для span убираем обводку */
         }
 
         .main-layout {
@@ -104,12 +108,13 @@
             z-index: 5;
         }
 
+        /* Левая боковая панель навигации */
         .side-nav {
             width: 290px;
-            background: #030000;
-            border-right: 2px solid #030000;
+            background: #121212; /* темно-серый */
+            border-right: 2px solid #0f0;
             padding: 20px 15px 30px 15px;
-            box-shadow: 5px 0 20px rgba(0, 50, 0, 0.9);
+            box-shadow: 5px 0 20px rgba(0, 255, 0, 0.2);
             display: flex;
             flex-direction: column;
             gap: 5px;
@@ -123,7 +128,7 @@
             right: -2px;
             width: 2px;
             height: 100%;
-            background: linear-gradient(180deg, #1f9, #030, #1f9);
+            background: linear-gradient(180deg, #0f0, #030, #0f0);
             opacity: 0.4;
             animation: borderGlow 4s linear infinite;
         }
@@ -134,10 +139,11 @@
             100% { opacity: 0.2; }
         }
 
+        /* Кнопка терминала */
         .terminal-button {
-            background: #000005;
-            border: 2px solid #1f9;
-            color: #9f9;
+            background: #1f1f1f;
+            border: 2px solid #0f0;
+            color: #f0f0f0;
             padding: 15px 18px;
             margin-bottom: 20px;
             text-align: center;
@@ -146,26 +152,28 @@
             letter-spacing: 4px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 0 20px #1f9;
+            box-shadow: 0 0 20px #0f0;
             border-radius: 5px;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .terminal-button:hover {
-            background: #030000;
+            background: #0f0;
             color: #000;
-            box-shadow: 0 0 35px #2f9;
+            box-shadow: 0 0 35px #0f0;
             transform: scale(1.02);
+            text-shadow: none;
         }
 
         .side-nav .nav-header {
-            color: #030000;
+            color: #aaa;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 15px;
-            border-bottom: 1px dashed #030000;
+            border-bottom: 1px dashed #0f0;
             padding-bottom: 10px;
-            text-shadow: 0 0 5px #030000;
+            text-shadow: 0 0 5px #0f0;
         }
 
         .side-nav .nav-item {
@@ -174,14 +182,14 @@
         }
 
         .side-nav .nav-link, .side-nav .nav-parent {
-            color: #030000;
+            color: #f0f0f0;
             text-decoration: none;
             padding: 12px 18px;
             border-radius: 4px;
             font-size: 1.1rem;
             transition: all 0.2s;
             border-left: 3px solid transparent;
-            background: rgba(20, 60, 20, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             margin: 2px 0;
             cursor: pointer;
             display: flex;
@@ -189,28 +197,31 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .side-nav .nav-link:hover, .side-nav .nav-parent:hover {
-            background: #030000;
-            border-left-color: #030000;
-            color: white;
+            background: #0f0;
+            border-left-color: #fff;
+            color: #000;
             transform: translateX(3px);
-            box-shadow: 0 0 15px #1f9;
+            box-shadow: 0 0 15px #0f0;
+            text-shadow: none;
         }
 
         .side-nav .nav-link.active, .side-nav .nav-parent.active {
-            background: #030000;
-            border-left-color: #030000;
-            color: #030000;
-            box-shadow: 0 0 20px #030000;
+            background: #0f0;
+            border-left-color: #fff;
+            color: #000;
+            box-shadow: 0 0 20px #0f0;
+            text-shadow: none;
         }
 
         .submenu {
             list-style: none;
             padding-left: 20px;
             margin: 5px 0 5px 10px;
-            border-left: 1px dashed #030000;
+            border-left: 1px dashed #0f0;
             display: none;
         }
 
@@ -221,14 +232,14 @@
         .submenu .nav-link {
             padding: 10px 15px;
             font-size: 1rem;
-            background: rgba(10, 40, 10, 0.7);
-            border-left-color: #3f9;
+            background: rgba(0, 255, 0, 0.1);
+            border-left-color: #0f0;
         }
 
         .arrow {
             font-size: 0.8rem;
             transition: transform 0.2s;
-            color: #3f9;
+            color: #0f0;
         }
 
         .nav-parent.active .arrow {
@@ -243,7 +254,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 5, 0, 0.95);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(3px);
             z-index: 2000;
             justify-content: center;
@@ -255,12 +266,12 @@
         }
 
         .modal-content {
-            background: #030000;
-            border: 3px solid #1f9;
+            background: #1a1a1a;
+            border: 3px solid #0f0;
             padding: 35px;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 0 50px #0f0, inset 0 0 20px #1f9;
+            box-shadow: 0 0 50px #0f0, inset 0 0 20px #0f0;
             animation: modalGlitch 3s infinite;
             position: relative;
             max-height: 80vh;
@@ -274,7 +285,7 @@
             left: -5px;
             right: -5px;
             bottom: -5px;
-            border: 1px solid #3f9;
+            border: 1px solid #0f0;
             opacity: 0.3;
             animation: borderPulse 2s infinite;
             pointer-events: none;
@@ -287,39 +298,40 @@
         }
 
         @keyframes modalGlitch {
-            0% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
-            20% { box-shadow: 0 0 40px #1f9, inset 0 0 15px #1f9; transform: skew(0.5deg); }
-            40% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; transform: skew(-0.5deg); }
-            60% { box-shadow: 0 0 50px #1f9, inset 0 0 20px #1f9; }
-            80% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
-            100% { box-shadow: 0 0 30px #1f9, inset 0 0 10px #1f9; }
+            0% { box-shadow: 0 0 30px #0f0, inset 0 0 10px #0f0; }
+            20% { box-shadow: 0 0 40px #0f0, inset 0 0 15px #0f0; transform: skew(0.5deg); }
+            40% { box-shadow: 0 0 30px #0f0, inset 0 0 10px #0f0; transform: skew(-0.5deg); }
+            60% { box-shadow: 0 0 50px #0f0, inset 0 0 20px #0f0; }
+            80% { box-shadow: 0 0 30px #0f0, inset 0 0 10px #0f0; }
+            100% { box-shadow: 0 0 30px #0f0, inset 0 0 10px #0f0; }
         }
 
         .modal-content h2 {
-            color: #9f9;
+            color: #f0f0f0;
             text-align: center;
             margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 0 0 5px #1f9;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .modal-content input {
             width: 100%;
             padding: 12px;
-            background: #030000;
-            border: 2px solid #1f9;
-            color: #9f9;
+            background: #0a0a0a;
+            border: 2px solid #0f0;
+            color: #f0f0f0;
             font-family: 'Courier New', monospace;
             font-size: 1rem;
             margin-bottom: 15px;
             outline: none;
-            box-shadow: 0 0 10px #1f9;
+            box-shadow: 0 0 10px #0f0;
+            text-shadow: 0 0 5px #0f0;
         }
 
         .modal-content input:focus {
-            background: #030000;
-            border-color: #4f9;
+            background: #1a1a1a;
+            border-color: #0f0;
         }
 
         .modal-error {
@@ -340,8 +352,8 @@
 
         .modal-btn {
             background: transparent;
-            border: 2px solid #1f9;
-            color: #9f9;
+            border: 2px solid #0f0;
+            color: #f0f0f0;
             padding: 10px 25px;
             font-family: 'Courier New', monospace;
             font-size: 1rem;
@@ -351,19 +363,21 @@
             letter-spacing: 2px;
             flex: 1;
             min-width: 120px;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .modal-btn:hover {
-            background: #1f9;
+            background: #0f0;
             color: #000;
-            box-shadow: 0 0 25px #1f9;
+            box-shadow: 0 0 25px #0f0;
+            text-shadow: none;
         }
 
         .content-area {
             flex: 1;
             padding: 35px 40px;
             overflow-y: auto;
-            background: rgba(0, 8, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(3px);
             position: relative;
         }
@@ -375,7 +389,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(0, 255, 0, 0.03) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 30%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -396,10 +410,10 @@
         }
 
         .scp-document {
-            background: #030000;
-            border: 2px solid #030000;
+            background: #121212;
+            border: 2px solid #0f0;
             padding: 40px 35px;
-            box-shadow: 0 15px 30px rgba(0, 30, 0, 0.9), inset 0 0 30px #0a2a0a;
+            box-shadow: 0 15px 30px rgba(0, 255, 0, 0.2), inset 0 0 30px #0a0a0a;
             position: relative;
         }
 
@@ -408,51 +422,54 @@
             position: absolute;
             top: 10px;
             right: 20px;
-            color: #030000;
+            color: #2a2a2a;
             font-size: 0.7rem;
             letter-spacing: 2px;
             opacity: 0.6;
+            text-shadow: 0 0 5px #0f0;
         }
 
         .doc-header {
-            border-bottom: 2px dashed #1f9;
+            border-bottom: 2px dashed #0f0;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
 
         .doc-header h1 {
-            color: #030000;
+            color: #f0f0f0;
             font-size: 2.2rem;
             font-weight: normal;
             text-transform: uppercase;
             letter-spacing: 5px;
-            text-shadow: 0 0 5px #1f9;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .doc-header .meta {
-            color: #030000;
+            color: #aaa;
             font-size: 0.9rem;
             margin-top: 8px;
+            text-shadow: 0 0 3px #0f0;
         }
 
         .doc-content {
-            color: #030000;
+            color: #f0f0f0;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .doc-content h2 {
-            color: #030000;
+            color: #f0f0f0;
             margin: 30px 0 15px;
             font-size: 1.8rem;
-            border-left: 5px solid #1f9;
+            border-left: 5px solid #0f0;
             padding-left: 20px;
-            text-shadow: 0 0 3px #1f9;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .doc-content h3 {
-            color: #030000;
+            color: #f0f0f0;
             margin: 25px 0 10px;
             font-size: 1.3rem;
-            text-decoration: underline #2f9 1px;
+            text-decoration: underline #0f0 1px;
         }
 
         .doc-content p {
@@ -460,40 +477,42 @@
         }
 
         .redacted {
-            background: #030000;
-            color: #030000;
+            background: #1a1a1a;
+            color: #1a1a1a;
             padding: 0 5px;
             border-radius: 3px;
             font-family: inherit;
             transition: 0.2s;
             cursor: default;
-            border: 1px solid #3f9;
+            border: 1px solid #0f0;
         }
 
         .redacted:hover {
-            color: #030000;
-            background: #030000;
+            color: #f0f0f0;
+            background: #1a1a1a;
         }
 
         .warning-block {
-            border: 2px solid #1f9;
-            background: #030000;
+            border: 2px solid #0f0;
+            background: #1a1a1a;
             padding: 20px;
             margin: 25px 0;
-            color: #cfc;
+            color: #f0f0f0;
             font-weight: bold;
-            box-shadow: 0 0 25px #1f9;
+            box-shadow: 0 0 25px #0f0;
             text-transform: uppercase;
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .level-badge {
-            color: #f99;
-            background: #030000;
+            color: #f66;
+            background: #2a0f0f;
             border: 1px solid #f66;
             padding: 3px 10px;
             display: inline-block;
             margin-right: 10px;
             font-size: 0.9rem;
+            text-shadow: 0 0 5px #f00;
         }
 
         .archive-page {
@@ -505,18 +524,19 @@
             text-align: center;
         }
 
+        /* Заголовок "АРХИВ РАЗВЛЕЧУДОВА" */
         .clickable-title {
             font-size: 4rem;
             font-weight: bold;
-            color: #030000;
-            text-shadow: 0 0 25px #1f9, 0 0 40px #030000;
+            color: #bfffbf;
+            text-shadow: 0 0 25px #0f0, 0 0 40px #0a0;
             cursor: pointer;
             transition: all 0.4s;
             border: 3px solid transparent;
             padding: 20px 40px;
             letter-spacing: 10px;
             text-transform: uppercase;
-            background: rgba(10, 30, 10, 0.5);
+            background: rgba(0, 30, 0, 0.5);
             border-radius: 60px;
             backdrop-filter: blur(6px);
             margin-bottom: 40px;
@@ -524,35 +544,36 @@
         }
 
         @keyframes titleGlitch {
-            0% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
+            0% { text-shadow: 0 0 25px #0f0, 0 0 40px #0a0; }
             10% { text-shadow: -2px 0 #ff00ff, 2px 0 #00ffff; }
             20% { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
-            30% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
-            100% { text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a; }
+            30% { text-shadow: 0 0 25px #0f0, 0 0 40px #0a0; }
+            100% { text-shadow: 0 0 25px #0f0, 0 0 40px #0a0; }
         }
 
         .clickable-title:hover {
             transform: scale(1.07);
-            border-color: #8f9;
-            box-shadow: 0 0 70px #2f9;
+            border-color: #0f0;
+            box-shadow: 0 0 70px #0f0;
         }
 
         .hidden-message {
             max-width: 750px;
-            background: rgba(5, 20, 5, 0.9);
-            border-left: 8px solid #1f9;
+            background: rgba(0, 20, 0, 0.9);
+            border-left: 8px solid #0f0;
             padding: 30px;
             border-radius: 20px;
-            color: #d7f7d7;
+            color: #f0f0f0;
             font-size: 1.4rem;
             line-height: 1.7;
-            box-shadow: 0 0 50px #1f9;
+            box-shadow: 0 0 50px #0f0;
             opacity: 0;
             transform: translateY(25px);
             transition: opacity 0.7s, transform 0.6s;
             pointer-events: none;
             text-align: left;
             backdrop-filter: blur(5px);
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
         }
 
         .hidden-message.show {
@@ -567,27 +588,32 @@
             margin-top: 20px;
         }
         .auth-table th, .auth-table td {
-            border: 1px solid #1f9;
+            border: 1px solid #0f0;
             padding: 10px;
             text-align: left;
         }
         .auth-table th {
-            background: #0f2a0f;
-            color: #9f9;
+            background: #1a1a1a;
+            color: #f0f0f0;
             text-transform: uppercase;
+            text-shadow: 0 0 5px #0f0;
         }
         .auth-table tr:nth-child(even) {
-            background: #0a1a0a;
+            background: #0f0f0f;
+        }
+        .auth-table td {
+            text-shadow: 0 0 3px #0f0;
         }
 
         footer {
-            background: #071007;
-            border-top: 2px solid #1f9;
+            background: #1a1a1a;
+            border-top: 2px solid #0f0;
             padding: 15px;
             text-align: center;
-            color: #4f8a4f;
+            color: #aaa;
             position: relative;
             z-index: 5;
+            text-shadow: 0 0 5px #0f0;
         }
 
         footer p {
@@ -607,7 +633,7 @@
             .side-nav {
                 width: 100%;
                 border-right: none;
-                border-bottom: 2px solid #1f9;
+                border-bottom: 2px solid #0f0;
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
@@ -623,31 +649,31 @@
             }
         }
 
-        .search-container {
-            margin-top: 20px;
-        }
         .search-results {
             list-style: none;
             padding: 0;
             margin-top: 15px;
             max-height: 200px;
             overflow-y: auto;
-            border: 1px dashed #1f9;
+            border: 1px dashed #0f0;
             padding: 10px;
         }
         .search-results li {
             margin: 5px 0;
         }
         .search-results a {
-            color: #9f9;
+            color: #f0f0f0;
             text-decoration: none;
             display: block;
             padding: 5px;
             border-left: 2px solid transparent;
+            text-shadow: 0 0 5px #0f0;
         }
         .search-results a:hover {
-            background: #1f3f1f;
-            border-left-color: #1f9;
+            background: #0f0;
+            color: #000;
+            border-left-color: #fff;
+            text-shadow: none;
         }
     </style>
 </head>
@@ -683,6 +709,7 @@
                 </ul>
             </div>
 
+            <!-- Архивы МОГ -->
             <div class="nav-item">
                 <span class="nav-parent" data-parent="mog">Архивы МОГ <span class="arrow">▶</span></span>
                 <ul class="submenu" id="sub-mog">
@@ -763,7 +790,7 @@
                     </div>
                 </div>
                 <div id="terminalSearchSection" style="display: none;">
-                    <p style="color: #9f9; text-align: center;">✅ АВТОРИЗАЦИЯ УСПЕШНА</p>
+                    <p style="color: #f0f0f0; text-align: center; text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;">✅ АВТОРИЗАЦИЯ УСПЕШНА</p>
                     <input type="text" id="searchKeywords" placeholder="Введите ключевое слово..." style="width: 100%; margin-bottom: 15px;">
                     <div class="search-results" id="searchResults"></div>
                     <div class="modal-buttons">
@@ -1132,7 +1159,7 @@
                 });
             });
 
-            // Раскрытие подменю
+            // Раскрытие подменю для обычных родителей (исключаем архивы и мог, у них свои модалки)
             const parents = document.querySelectorAll('.nav-parent:not([data-parent="archives"])');
             parents.forEach(parent => {
                 parent.addEventListener('click', function(e) {
@@ -1176,8 +1203,8 @@
                     archiveInput.style.borderColor = '#f66';
                     archiveInput.style.boxShadow = '0 0 20px #f00';
                     setTimeout(() => {
-                        archiveInput.style.borderColor = '#1f9';
-                        archiveInput.style.boxShadow = '0 0 15px #1f9';
+                        archiveInput.style.borderColor = '#0f0';
+                        archiveInput.style.boxShadow = '0 0 15px #0f0';
                     }, 300);
                 }
             }
@@ -1244,8 +1271,8 @@
                     authDbPasswordInput.style.borderColor = '#f66';
                     authDbPasswordInput.style.boxShadow = '0 0 20px #f00';
                     setTimeout(() => {
-                        authDbPasswordInput.style.borderColor = '#1f9';
-                        authDbPasswordInput.style.boxShadow = '0 0 15px #1f9';
+                        authDbPasswordInput.style.borderColor = '#0f0';
+                        authDbPasswordInput.style.boxShadow = '0 0 15px #0f0';
                     }, 300);
                 }
             });
@@ -1277,9 +1304,9 @@
                     authDbClass.style.borderColor = '#f66';
                     authDbName.style.borderColor = '#f66';
                     setTimeout(() => {
-                        authDbLevel.style.borderColor = '#1f9';
-                        authDbClass.style.borderColor = '#1f9';
-                        authDbName.style.borderColor = '#1f9';
+                        authDbLevel.style.borderColor = '#0f0';
+                        authDbClass.style.borderColor = '#0f0';
+                        authDbName.style.borderColor = '#0f0';
                     }, 300);
                 }
             });
