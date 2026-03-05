@@ -684,7 +684,7 @@
             </div>
 
             <div class="nav-item">
-                <span class="nav-parent" data-parent="mog" id="mogParent">Архивы МОГ <span class="arrow">▶</span></span>
+                <span class="nav-parent" data-parent="mog">Архивы МОГ <span class="arrow">▶</span></span>
                 <ul class="submenu" id="sub-mog">
                     <li><a href="#" class="nav-link" data-page="mog-unit-7">МОГ-7 (заглушка)</a></li>
                     <li><a href="#" class="nav-link" data-page="mog-unit-12">МОГ-12 (заглушка)</a></li>
@@ -715,19 +715,6 @@
                 <div class="modal-buttons">
                     <button class="modal-btn" id="submitCode">ВВОД</button>
                     <button class="modal-btn" id="closeModal">ЗАКРЫТЬ</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Модальное окно для Архивов МОГ (пароль 5514) -->
-        <div class="modal-overlay" id="mogModal">
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <h2>ДОСТУП К АРХИВАМ МОГ</h2>
-                <input type="password" id="mogAccessCode" placeholder="****" maxlength="4" autofocus>
-                <div class="modal-error" id="mogModalError"></div>
-                <div class="modal-buttons">
-                    <button class="modal-btn" id="submitMogCode">ВВОД</button>
-                    <button class="modal-btn" id="closeMogModal">ЗАКРЫТЬ</button>
                 </div>
             </div>
         </div>
@@ -1146,7 +1133,7 @@
             });
 
             // Раскрытие подменю
-            const parents = document.querySelectorAll('.nav-parent:not([data-parent="archives"]):not([data-parent="mog"])');
+            const parents = document.querySelectorAll('.nav-parent:not([data-parent="archives"])');
             parents.forEach(parent => {
                 parent.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1207,57 +1194,6 @@
             closeModal.addEventListener('click', closeArchiveModal);
             archiveModal.addEventListener('click', function(e) {
                 if (e.target === archiveModal) closeArchiveModal();
-            });
-
-            // ==================== МОДАЛЬНОЕ ОКНО ДЛЯ АРХИВОВ МОГ (пароль 5514) ====================
-            const mogParent = document.getElementById('mogParent');
-            const subMog = document.getElementById('sub-mog');
-            const mogModal = document.getElementById('mogModal');
-            const mogInput = document.getElementById('mogAccessCode');
-            const mogError = document.getElementById('mogModalError');
-            const submitMogCode = document.getElementById('submitMogCode');
-            const closeMogModal = document.getElementById('closeMogModal');
-            const MOG_CODE = "5514";
-
-            function openMogModal() {
-                mogModal.classList.add('active');
-                mogInput.value = '';
-                mogError.textContent = '';
-                mogInput.focus();
-            }
-
-            function closeMogModalFunc() {
-                mogModal.classList.remove('active');
-            }
-
-            function checkMogCode() {
-                if (mogInput.value === MOG_CODE) {
-                    closeMogModalFunc();
-                    mogParent.classList.add('active');
-                    subMog.classList.add('active');
-                } else {
-                    mogError.textContent = '⚠ ДОСТУП ЗАПРЕЩЁН ⚠';
-                    mogInput.style.borderColor = '#f66';
-                    mogInput.style.boxShadow = '0 0 20px #f00';
-                    setTimeout(() => {
-                        mogInput.style.borderColor = '#1f9';
-                        mogInput.style.boxShadow = '0 0 15px #1f9';
-                    }, 300);
-                }
-            }
-
-            mogParent.addEventListener('click', function(e) {
-                e.preventDefault();
-                openMogModal();
-            });
-
-            submitMogCode.addEventListener('click', checkMogCode);
-            mogInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkMogCode();
-            });
-            closeMogModal.addEventListener('click', closeMogModalFunc);
-            mogModal.addEventListener('click', function(e) {
-                if (e.target === mogModal) closeMogModalFunc();
             });
 
             // ==================== МОДАЛЬНЫЕ ОКНА ДЛЯ БАЗЫ АВТОРИЗОВАННЫХ СОТРУДНИКОВ ====================
