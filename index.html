@@ -14,8 +14,8 @@
 
         body {
             font-family: 'Courier New', Courier, monospace;
-            background: #020402;
-            color: #b7dbb7;
+            background: #000005;
+            color: #000005;
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
@@ -43,37 +43,37 @@
 
         .top-bar {
             background: #071007;
-            border-bottom: 2px solid #1a9e1a;
+            border-bottom: 2px solid #071007;
             padding: 12px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 0 25px #0f6f0f;
+            box-shadow: 0 0 25px #071007;
             position: relative;
             z-index: 10;
-            border-image: repeating-linear-gradient(45deg, #1a9e1a, #0a2b0a 15px) 30;
+            border-image: repeating-linear-gradient(45deg, #071007, #071007 15px) 30;
         }
 
         .snake-logo {
             font-size: 2.5rem;
-            filter: drop-shadow(0 0 8px #4aff4a);
+            filter: drop-shadow(0 0 8px #FFFFFF);
             animation: glowPulse 3s infinite;
             line-height: 1;
         }
 
         @keyframes glowPulse {
-            0% { filter: drop-shadow(0 0 2px #4aff4a); text-shadow: 0 0 3px #0f0; }
-            50% { filter: drop-shadow(0 0 15px #1bb31b); text-shadow: 0 0 10px #0f0; }
-            100% { filter: drop-shadow(0 0 2px #4aff4a); text-shadow: 0 0 3px #0f0; }
+            0% { filter: drop-shadow(0 0 2px #AD0700); text-shadow: 0 0 3px #0f0; }
+            50% { filter: drop-shadow(0 0 15px #AD0700); text-shadow: 0 0 10px #0f0; }
+            100% { filter: drop-shadow(0 0 2px ##AD0700); text-shadow: 0 0 3px #0f0; }
         }
 
         .org-name {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #9fff9f;
+            color: #030000;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 0 0 8px #1e9e1e;
+            text-shadow: 0 0 8px #030000;
             position: relative;
         }
 
@@ -90,7 +90,7 @@
         }
 
         .org-name span {
-            color: #6a8a6a;
+            color: #030000;
             font-size: 1rem;
             margin-left: 10px;
             letter-spacing: 1px;
@@ -106,8 +106,8 @@
 
         .side-nav {
             width: 290px;
-            background: #091109;
-            border-right: 2px solid #1a6a1a;
+            background: #030000;
+            border-right: 2px solid #030000;
             padding: 20px 15px 30px 15px;
             box-shadow: 5px 0 20px rgba(0, 50, 0, 0.9);
             display: flex;
@@ -135,7 +135,7 @@
         }
 
         .terminal-button {
-            background: #0f230f;
+            background: #000005;
             border: 2px solid #1f9;
             color: #9f9;
             padding: 15px 18px;
@@ -151,21 +151,21 @@
         }
 
         .terminal-button:hover {
-            background: #1f6f1f;
+            background: #030000;
             color: #000;
             box-shadow: 0 0 35px #2f9;
             transform: scale(1.02);
         }
 
         .side-nav .nav-header {
-            color: #5a9e5a;
+            color: #030000;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 15px;
-            border-bottom: 1px dashed #2a7a2a;
+            border-bottom: 1px dashed #030000;
             padding-bottom: 10px;
-            text-shadow: 0 0 5px #1a6a1a;
+            text-shadow: 0 0 5px #030000;
         }
 
         .side-nav .nav-item {
@@ -174,7 +174,7 @@
         }
 
         .side-nav .nav-link, .side-nav .nav-parent {
-            color: #b3e6b3;
+            color: #030000;
             text-decoration: none;
             padding: 12px 18px;
             border-radius: 4px;
@@ -192,25 +192,25 @@
         }
 
         .side-nav .nav-link:hover, .side-nav .nav-parent:hover {
-            background: #1a4a1a;
-            border-left-color: #8aff8a;
+            background: #030000;
+            border-left-color: #030000;
             color: white;
             transform: translateX(3px);
             box-shadow: 0 0 15px #1f9;
         }
 
         .side-nav .nav-link.active, .side-nav .nav-parent.active {
-            background: #1f6f1f;
-            border-left-color: #cfffd0;
-            color: #ffffff;
-            box-shadow: 0 0 20px #2f9f2f;
+            background: #030000;
+            border-left-color: #030000;
+            color: #030000;
+            box-shadow: 0 0 20px #030000;
         }
 
         .submenu {
             list-style: none;
             padding-left: 20px;
             margin: 5px 0 5px 10px;
-            border-left: 1px dashed #2a9a2a;
+            border-left: 1px dashed #030000;
             display: none;
         }
 
@@ -255,7 +255,7 @@
         }
 
         .modal-content {
-            background: #0b1a0b;
+            background: #030000;
             border: 3px solid #1f9;
             padding: 35px;
             max-width: 450px;
@@ -307,7 +307,7 @@
         .modal-content input {
             width: 100%;
             padding: 12px;
-            background: #020502;
+            background: #030000;
             border: 2px solid #1f9;
             color: #9f9;
             font-family: 'Courier New', monospace;
@@ -318,7 +318,7 @@
         }
 
         .modal-content input:focus {
-            background: #051005;
+            background: #030000;
             border-color: #4f9;
         }
 
@@ -396,8 +396,8 @@
         }
 
         .scp-document {
-            background: #0a140a;
-            border: 2px solid #1e6a1e;
+            background: #030000;
+            border: 2px solid #030000;
             padding: 40px 35px;
             box-shadow: 0 15px 30px rgba(0, 30, 0, 0.9), inset 0 0 30px #0a2a0a;
             position: relative;
@@ -408,7 +408,7 @@
             position: absolute;
             top: 10px;
             right: 20px;
-            color: #2f6a2f;
+            color: #030000;
             font-size: 0.7rem;
             letter-spacing: 2px;
             opacity: 0.6;
@@ -421,7 +421,7 @@
         }
 
         .doc-header h1 {
-            color: #cfefcf;
+            color: #030000;
             font-size: 2.2rem;
             font-weight: normal;
             text-transform: uppercase;
@@ -430,17 +430,17 @@
         }
 
         .doc-header .meta {
-            color: #6a9a6a;
+            color: #030000;
             font-size: 0.9rem;
             margin-top: 8px;
         }
 
         .doc-content {
-            color: #d0f0d0;
+            color: #030000;
         }
 
         .doc-content h2 {
-            color: #bfe6bf;
+            color: #030000;
             margin: 30px 0 15px;
             font-size: 1.8rem;
             border-left: 5px solid #1f9;
@@ -449,7 +449,7 @@
         }
 
         .doc-content h3 {
-            color: #afd7af;
+            color: #030000;
             margin: 25px 0 10px;
             font-size: 1.3rem;
             text-decoration: underline #2f9 1px;
@@ -460,8 +460,8 @@
         }
 
         .redacted {
-            background: #1f3f1f;
-            color: #1f3f1f;
+            background: #030000;
+            color: #030000;
             padding: 0 5px;
             border-radius: 3px;
             font-family: inherit;
@@ -471,13 +471,13 @@
         }
 
         .redacted:hover {
-            color: #9f9;
-            background: #1a3f1a;
+            color: #030000;
+            background: #030000;
         }
 
         .warning-block {
             border: 2px solid #1f9;
-            background: #0a1f0a;
+            background: #030000;
             padding: 20px;
             margin: 25px 0;
             color: #cfc;
@@ -488,7 +488,7 @@
 
         .level-badge {
             color: #f99;
-            background: #2a0f0f;
+            background: #030000;
             border: 1px solid #f66;
             padding: 3px 10px;
             display: inline-block;
@@ -508,8 +508,8 @@
         .clickable-title {
             font-size: 4rem;
             font-weight: bold;
-            color: #bfffbf;
-            text-shadow: 0 0 25px #1f9, 0 0 40px #1a6a1a;
+            color: #030000;
+            text-shadow: 0 0 25px #1f9, 0 0 40px #030000;
             cursor: pointer;
             transition: all 0.4s;
             border: 3px solid transparent;
